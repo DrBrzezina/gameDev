@@ -3,6 +3,33 @@ using UnityEngine.Tilemaps; // Dodaj to!
 
 public class LevelGenerator : MonoBehaviour
 {
+    [Header("Loot Settings")]
+    public GameObject itemPickupPrefab; // Prefab z Twoim skryptem ItemPickup
+    public List<Item> possibleLoot;     // Lista przedmiotów z folderu Data
+    [Range(0, 1)] public float lootSpawnChance = 0.2f; // 20% szansy na przedmiot w pokoju
+
+// Zaktualizuj metodę CreateRoom lub dodaj nową:
+    void PlaceLootInRoom(int x, int y, int w, int h)
+    {
+     // Losujemy, czy w tym pokoju w ogóle pojawi się skarb
+        if (Random.value < lootSpawnChance)
+        {
+            // Wybieramy losowe miejsce wewnątrz pokoju
+            int spawnX = Random.Range(x, x + w);
+            int spawnY = Random.Range(y, y + h);
+            Vector3 spawnPos = new Vector3(spawnX, spawnY, 0);
+    
+            // Wybieramy losowy przedmiot z listy
+            Item randomItem = possibleLoot[Random.Range(0, possibleLoot.Count)];
+
+            // Logika spawnowania (wykonana przez Unity, ale kod przygotowany):
+            Debug.Log($"Planowane spawnowanie {randomItem.itemName} na pozycji {spawnPos}");
+        
+            // Ta linia zadziała w Unity:
+            // GameObject loot = Instantiate(itemPickupPrefab, spawnPos, Quaternion.identity);
+            // loot.GetComponent<ItemPickup>().itemData = randomItem;
+        }
+    }   
     [Header("Tilemap References")]
     public Tilemap groundTilemap; // Referencja do warstwy podłogi
     public Tilemap wallTilemap;   // Referencja do warstwy ścian
